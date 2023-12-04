@@ -14,6 +14,7 @@ def load_data():
 def create_hour_chart(data):
     # Convert 'CRASH TIME' to datetime and extract hour
     data['CRASH TIME'] = pd.to_datetime(data['CRASH TIME'], format='%H:%M').dt.hour
+    
 
     # Incidents by Hour of the Day
     hour_chart = alt.Chart(data).mark_bar().encode(
@@ -32,6 +33,7 @@ def create_day_chart(data):
     data['CRASH DATE'] = pd.to_datetime(data['CRASH DATE'])
     data['DayOfWeek'] = data['CRASH DATE'].dt.day_name()
     data['Month'] = data['CRASH DATE'].dt.month_name()
+    
 
     # Incidents by Day of the Week
     day_chart = alt.Chart(data).mark_bar().encode(
@@ -46,6 +48,7 @@ def create_day_chart(data):
 
 # Function for Injury Chart
 def create_injury_chart(data):
+    
     # Injury Counts
     injury_chart = alt.Chart(data).mark_bar().encode(
         x='sum(NUMBER OF PERSONS INJURED):Q',
@@ -60,7 +63,7 @@ def create_injury_chart(data):
 
 # Function for Injury Chart
 def create_borough_chart(data):
-
+    
     # Borough Counts
     borough_chart = alt.Chart(data).mark_bar().encode(
         x='count():Q',
@@ -75,6 +78,7 @@ def create_borough_chart(data):
 
 # Function for Heatmap
 def create_heatmap(data):
+    
     # Filter the data 
     data = data.dropna(subset=['VEHICLE TYPE CODE 1'])
     data = data[data['NUMBER OF PERSONS INJURED'] > 0]
@@ -120,29 +124,35 @@ def main():
     # Load the data
     data = load_data()
 
-    # Hourly Trend Chart
-    hour_chart = create_hour_chart(data)
+    # Create a multi-select widget for borough selection
+    selected_boroughs = st.multiselect('Select Boroughs', options=data['BOROUGH'].unique())
+
+    # Filter data based on selected boroughs
+    if selected_boroughs:
+        filtered_data = data[data['BOROUGH'].isin(selected_boroughs)]
+    else:
+        filtered_data = data
+
+    # Create and display charts using filtered data
+    hour_chart = create_hour_chart(filtered_data)
     st.altair_chart(hour_chart, use_container_width=True)
 
-    # Day Trend Chart
-    day_chart = create_day_chart(data)
+    day_chart = create_day_chart(filtered_data)
     st.altair_chart(day_chart, use_container_width=True)
 
-    # Injury Chart
-    injury_chart = create_injury_chart(data)
+    injury_chart = create_injury_chart(filtered_data)
     st.altair_chart(injury_chart, use_container_width=True)
 
-    # Borough Chart
-    borough_chart = create_borough_chart(data)
+    borough_chart = create_borough_chart(filtered_data)
     st.altair_chart(borough_chart, use_container_width=True)
 
-    # Heatmap
-    heatmap = create_heatmap(data)
+    heatmap = create_heatmap(filtered_data)
     st.altair_chart(heatmap, use_container_width=True)
 
     # Word Cloud
-    wordcloud_file_path = create_word_cloud(data)
+    wordcloud_file_path = create_word_cloud(filtered_data)
     st.image(wordcloud_file_path, caption='Word Cloud', use_column_width=True)
 
 if __name__ == "__main__":
     main()
+
