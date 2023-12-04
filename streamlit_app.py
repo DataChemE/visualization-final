@@ -18,7 +18,7 @@ def create_hour_chart(data):
 
     hour_chart = alt.Chart(data).mark_bar().encode(
         x=alt.X('CRASH TIME:O', axis=alt.Axis(title='Time of Day')),
-        y=alt.Y('count():Q', axis=alt.Axis(title='Number of Incidents')),
+        y=alt.Y('count():Q', axis=alt.Axis(title='Total Incidents')),
        tooltip=[alt.Tooltip('CRASH TIME', title='Hour'), alt.Tooltip('count()', title='Total Incidents')]
     ).properties(
         title='Incidents by Hour of the Day'
