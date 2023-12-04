@@ -16,10 +16,9 @@ def create_hour_chart(data):
     data['CRASH TIME'] = pd.to_datetime(data['CRASH TIME'], format='%H:%M').dt.hour
     
 
-    # Incidents by Hour of the Day
     hour_chart = alt.Chart(data).mark_bar().encode(
-        x='CRASH TIME:O',
-        y='count():Q',
+        x=alt.X('CRASH TIME:O', axis=alt.Axis(title='Time of Day')),
+        y=alt.Y('count():Q', axis=alt.Axis(title='Number of Incidents')),
         tooltip=['CRASH TIME', 'count()']
     ).properties(
         title='Incidents by Hour of the Day'
@@ -35,10 +34,9 @@ def create_day_chart(data):
     data['Month'] = data['CRASH DATE'].dt.month_name()
     
 
-    # Incidents by Day of the Week
     day_chart = alt.Chart(data).mark_bar().encode(
-        x='DayOfWeek:O',
-        y='count():Q',
+        x=alt.X('DayOfWeek:O', axis=alt.Axis(title='Day of the Week')),
+        y=alt.Y('count():Q', axis=alt.Axis(title='Total Incidents')),
         tooltip=['DayOfWeek', 'count()']
     ).properties(
         title='Incidents by Day of the Week'
@@ -49,11 +47,10 @@ def create_day_chart(data):
 # Function for Injury Chart
 def create_injury_chart(data):
     
-    # Injury Counts
     injury_chart = alt.Chart(data).mark_bar().encode(
-        x='sum(NUMBER OF PERSONS INJURED):Q',
-        y='BOROUGH:N',
-        color= 'BOROUGH:N',
+        x=alt.X('sum(NUMBER OF PERSONS INJURED):Q', axis=alt.Axis(title='Total Number of Injuries')),
+        y=alt.Y('BOROUGH:N', axis=alt.Axis(title='Borough')),
+        color='BOROUGH:N',
         tooltip=['BOROUGH', 'sum(NUMBER OF PERSONS INJURED)']
     ).properties(
         title='Injury Counts by Borough'
@@ -66,9 +63,9 @@ def create_borough_chart(data):
     
     # Borough Counts
     borough_chart = alt.Chart(data).mark_bar().encode(
-        x='count():Q',
-        y='BOROUGH:N',
-        color= 'BOROUGH:N',
+        x=alt.X('count():Q', axis=alt.Axis(title='Incident Count')),
+        y=alt.Y('BOROUGH:N', axis=alt.Axis(title='Borough')),
+        color='BOROUGH:N',
         tooltip=['BOROUGH', 'count()']
     ).properties(
         title='Incident Counts by Borough'
@@ -91,9 +88,9 @@ def create_heatmap(data):
 
     # Create the heatmap
     heatmap = alt.Chart(heatmap_data).mark_rect().encode(
-        x='BOROUGH:N',
-        y='VEHICLE TYPE CODE 1:N',
-        color='Incidents:Q',
+        x=alt.X('BOROUGH:N', axis=alt.Axis(title='Borough')),
+        y=alt.Y('VEHICLE TYPE CODE 1:N', axis=alt.Axis(title='Vehicle Type')),
+        color=alt.Color('Incidents:Q', scale=alt.Scale(scheme='greenblue'), legend=alt.Legend(title="Number of Incidents")),
         tooltip=['BOROUGH', 'VEHICLE TYPE CODE 1', 'Incidents']
     ).properties(
         title='Heatmap of Incidents by Vehicle Type and Borough'
