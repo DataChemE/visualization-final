@@ -19,7 +19,7 @@ def create_hour_chart(data):
     hour_chart = alt.Chart(data).mark_bar().encode(
         x=alt.X('CRASH TIME:O', axis=alt.Axis(title='Time of Day')),
         y=alt.Y('count():Q', axis=alt.Axis(title='Number of Incidents')),
-        tooltip=['CRASH TIME', 'count()']
+       tooltip=[alt.Tooltip('CRASH TIME', title='Hour'), alt.Tooltip('count()', title='Total Incidents')]
     ).properties(
         title='Incidents by Hour of the Day'
     )
@@ -37,7 +37,7 @@ def create_day_chart(data):
     day_chart = alt.Chart(data).mark_bar().encode(
         x=alt.X('DayOfWeek:O', axis=alt.Axis(title='Day of the Week')),
         y=alt.Y('count():Q', axis=alt.Axis(title='Total Incidents')),
-        tooltip=['DayOfWeek', 'count()']
+        tooltip=[alt.Tooltip('DayOfWeek', title = "Day of the Week"), alt.Tooltip('count()', title = "Total Incidents")]
     ).properties(
         title='Incidents by Day of the Week'
     )
@@ -51,7 +51,7 @@ def create_injury_chart(data):
         x=alt.X('sum(NUMBER OF PERSONS INJURED):Q', axis=alt.Axis(title='Total Number of Injuries')),
         y=alt.Y('BOROUGH:N', axis=alt.Axis(title='Borough')),
         color='BOROUGH:N',
-        tooltip=['BOROUGH', 'sum(NUMBER OF PERSONS INJURED)']
+        tooltip=[alt.Tooltip('BOROUGH', title = "Borough"), alt.Tooltip('sum(NUMBER OF PERSONS INJURED)', title = "Total Injuries")]
     ).properties(
         title='Injury Counts by Borough'
     )
@@ -66,7 +66,7 @@ def create_borough_chart(data):
         x=alt.X('count():Q', axis=alt.Axis(title='Incident Count')),
         y=alt.Y('BOROUGH:N', axis=alt.Axis(title='Borough')),
         color='BOROUGH:N',
-        tooltip=['BOROUGH', 'count()']
+        tooltip=[alt.Tooltip('BOROUGH', title = "Borough"), alt.Tooltip('count()', title = "Total Incidents")]
     ).properties(
         title='Incident Counts by Borough'
     )
@@ -91,7 +91,7 @@ def create_heatmap(data):
         x=alt.X('BOROUGH:N', axis=alt.Axis(title='Borough')),
         y=alt.Y('VEHICLE TYPE CODE 1:N', axis=alt.Axis(title='Vehicle Type')),
         color=alt.Color('Incidents:Q', scale=alt.Scale(scheme='greenblue'), legend=alt.Legend(title="Number of Incidents")),
-        tooltip=['BOROUGH', 'VEHICLE TYPE CODE 1', 'Incidents']
+        tooltip=[alt.Tooltip('BOROUGH', title = "Borough"), alt.Tooltip('VEHICLE TYPE CODE 1', title = "Vehicle Type"), alt.Tooltip('Incidents', title = "Total Incidents")]
     ).properties(
         title='Heatmap of Incidents by Vehicle Type and Borough'
     )
@@ -116,7 +116,7 @@ def create_word_cloud(data):
     return wordcloud_file_path
 
 def main():
-    st.title("NYC Motor Vehicle Collisions Visualizations")
+    st.title("NYC Motor Vehicle Collisions")
 
     # Load the data
     data = load_data()
