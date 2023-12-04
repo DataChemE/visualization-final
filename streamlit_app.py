@@ -6,7 +6,7 @@ from wordcloud import WordCloud
 # Function to load and return the datasets
 def load_data():
     # Load the datasets here. Update the file paths as needed.
-    data = pd.read_csv('2022_Motor_Vehicle_Collisions_-_Crashes.csv')
+    data = pd.read_csv('Motor_Vehicle_Collisions_-_Crashes-2.csv')
    
     return data
 
@@ -101,7 +101,7 @@ def create_heatmap(data):
 # Function for Word Cloud
 def create_word_cloud(data):
     # Combine all contributing factor columns into a single string
-    contributing_factors = data[['CONTRIBUTING FACTOR VEHICLE 1', 'CONTRIBUTING FACTOR VEHICLE 2']].fillna('').agg(' '.join, axis=1)
+    contributing_factors = data[['CONTRIBUTING FACTOR VEHICLE 1']].fillna('').agg(' '.join, axis=1)
 
     # Generate the word cloud
     wordcloud = WordCloud(width = 800, height = 800, 
